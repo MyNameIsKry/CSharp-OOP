@@ -53,6 +53,15 @@ namespace QuanLyDanhSachSinhVien {
                 Console.WriteLine($"{sv.MaSV} - {sv.HoTen} - {sv.DiemSinhVien}");
             }
         }
+
+        public void thongTinhSinhVienById(string id) {
+            SinhVien sv = findSinhVienById(id);
+            Console.WriteLine($"{sv.MaSV} - {sv.HoTen} - {sv.DiemSinhVien}");
+        }
+
+        private SinhVien findSinhVienById(string id) {
+            return danhSachSinhVien.Find(sv => sv.MaSV == id);
+        }
     }
 
     class Program {
@@ -60,6 +69,7 @@ namespace QuanLyDanhSachSinhVien {
             QuanLySinhVien ListSinhVien = new QuanLySinhVien();
             ListSinhVien.nhapThongTinSinhVien();
             ListSinhVien.xuatThongTinSinhVien();
+            ListSinhVien.thongTinhSinhVienById("111");
         }
     }
 }
