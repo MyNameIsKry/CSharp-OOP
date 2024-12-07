@@ -74,7 +74,7 @@
 
         public void XuatDanhSachNhanVien() {
             foreach (NhanVien nv in ListNhanVien) {
-                Console.WriteLine($"{nv.MaNV} - {nv.HoTenNV} - {nv.TinhLuong()}");
+                Console.WriteLine($"{nv.MaNV} - {nv.HoTenNV} - {nv.NamVaoLamNV} - {nv.TinhLuong()}");
             }
             Console.WriteLine($"Tong luong cua tat ca nhan vien: {tinhTongLuong()}");
         }
@@ -92,6 +92,15 @@
 
             return nhanVien!;
         }
+
+        public void SapXepNhanVienTheoNam() {
+            for (int i = 0; i < ListNhanVien.Count - 1; i++) {
+                for (int j = i + 1; j < ListNhanVien.Count; j++) {
+                    if (ListNhanVien[i].NamVaoLamNV > ListNhanVien[j].NamVaoLamNV)
+                            (ListNhanVien[i], ListNhanVien[j]) = (ListNhanVien[j], ListNhanVien[i]);
+                }
+            }
+        }
     }
 
     class Program {
@@ -100,8 +109,12 @@
             qlnv.NhapDanhSachNhanVien();
             qlnv.XuatDanhSachNhanVien();
             NhanVien nv = qlnv.TimNhanVienLuongCaoNhat();
+            Console.WriteLine($"Nhan vien co luong cao nhat: {nv.MaNV} - {nv.HoTenNV}");
 
-            Console.Write($"Nhan vien co luong cao nhat: {nv.MaNV} - {nv.HoTenNV}");
+            Console.WriteLine("Sau khi sap xep tang dan theo nam: ");
+            qlnv.SapXepNhanVienTheoNam();
+            qlnv.XuatDanhSachNhanVien();
+
         }
     }
 }
