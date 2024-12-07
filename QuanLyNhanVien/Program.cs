@@ -2,7 +2,7 @@
     class NhanVien {    
         private string MaNhanVien;
         private string HoTenNhanVien;
-        private double HeSoLuong;
+        private double HeSoLuong = 1250;
         private int NamVaoLam;
 
         public string MaNV {
@@ -14,11 +14,16 @@
             get { return HoTenNhanVien; }
             set { HoTenNhanVien = value; }
         }
+
+        public int NamVaoLamNV {
+            get { return NamVaoLam; }
+            set { NamVaoLam = value; }
+        }
         
         public static readonly double MLTT = 1490;
 
         private double TinhHSPCTN() {
-            return (DateTime.Now.Year - NamVaoLam) / 100;
+            return (DateTime.Now.Year - NamVaoLam) / 100.0;
         }
 
         private double TinhLuongCoBan() {
@@ -26,22 +31,19 @@
         }
 
         public double TinhLuong() {
-            return TinhLuongCoBan() * TinhHSPCTN();
+            return TinhLuongCoBan() * (1 + TinhHSPCTN());
         }
-
-        
     }
 
     class QuanLyNhanVien {
         public List<NhanVien> ListNhanVien = new List<NhanVien>();
 
-        public List<NhanVien> DSNhanVien {
-            get { return ListNhanVien; }
-            set { ListNhanVien = value; } 
-        }
         public void NhapDanhSachNhanVien() {
             Console.Write("Nhap so luong nhan vien: ");
-            int n = int.Parse(Console.ReadLine()!);
+            int n;
+            while (!int.TryParse(Console.ReadLine(), out n) || n <= 0) {
+                Console.WriteLine("Vui lòng nhập số nguyên dương.");
+            }
 
             for (int i = 0; i < n; i++) {
                 NhanVien nv = new NhanVien();
@@ -51,21 +53,40 @@
                 nv.MaNV = Console.ReadLine()!;
                 Console.Write("Nhap ho ten nhan vien: ");
                 nv.HoTenNV = Console.ReadLine()!;
+                Console.Write("Nhap nam vao lam: ");
+                int nam;
+                while (!int.TryParse(Console.ReadLine(), out nam) || nam <= 1900 || nam > DateTime.Now.Year) {
+                    Console.WriteLine("Năm vào làm không hợp lệ, vui lòng nhập lại.");
+                }
+                nv.NamVaoLamNV = nam;
 
                 ListNhanVien.Add(nv);
             }
         }
 
-        public void XuatDanhSachNhanVien() {
-            foreach (NhanVien nv in DSNhanVien) {
-                Console.WriteLine($"{nv.MaNV} - {nv.HoTenNV}");
+        private double tinhTongLuong() {
+            double tongLuong = 0;
+            foreach (NhanVien nv in ListNhanVien) {
+                tongLuong += nv.TinhLuong();
             }
+            return tongLuong;
         }
+
+        public void XuatDanhSachNhanVien() {
+            foreach (NhanVien nv in ListNhanVien) {
+                Console.WriteLine($"{nv.MaNV} - {nv.HoTenNV} - {nv.TinhLuong}");
+            }
+            Console.WriteLine($"Tong luong cua tat ca nhan vien: {tinhTongLuong}");
+        }
+
+        
     }
 
     class Program {
         public static void Main() {
-
+            QuanLyNhanVien qlnv = new QuanLyNhanVien();
+            qlnv.NhapDanhSachNhanVien();
+            qlnv.XuatDanhSachNhanVien();
         }
     }
 }
