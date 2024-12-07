@@ -74,12 +74,24 @@
 
         public void XuatDanhSachNhanVien() {
             foreach (NhanVien nv in ListNhanVien) {
-                Console.WriteLine($"{nv.MaNV} - {nv.HoTenNV} - {nv.TinhLuong}");
+                Console.WriteLine($"{nv.MaNV} - {nv.HoTenNV} - {nv.TinhLuong()}");
             }
-            Console.WriteLine($"Tong luong cua tat ca nhan vien: {tinhTongLuong}");
+            Console.WriteLine($"Tong luong cua tat ca nhan vien: {tinhTongLuong()}");
         }
 
-        
+        public NhanVien TimNhanVienLuongCaoNhat() {
+            NhanVien? nhanVien = null;
+            double luongMax = 0;
+            foreach(NhanVien nv in ListNhanVien) {
+                double luongNV = nv.TinhLuong();
+                if (nv.TinhLuong() > luongMax) {
+                    luongMax = luongNV;
+                    nhanVien = nv;
+                }
+            }
+
+            return nhanVien!;
+        }
     }
 
     class Program {
@@ -87,6 +99,9 @@
             QuanLyNhanVien qlnv = new QuanLyNhanVien();
             qlnv.NhapDanhSachNhanVien();
             qlnv.XuatDanhSachNhanVien();
+            NhanVien nv = qlnv.TimNhanVienLuongCaoNhat();
+
+            Console.Write($"Nhan vien co luong cao nhat: {nv.MaNV} - {nv.HoTenNV}");
         }
     }
 }
